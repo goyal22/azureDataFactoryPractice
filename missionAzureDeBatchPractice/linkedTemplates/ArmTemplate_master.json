@@ -1,0 +1,103 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "missionAzureDeBatchPractice"
+		},
+		"adls_connection_linked_service_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'adls_connection_linked_service'"
+		},
+		"sql_database_connection_linked_service_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'sql_database_connection_linked_service'"
+		},
+		"adls_connection_linked_service_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://missionazurelibadlsakash.dfs.core.windows.net/"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "missionAzureDeBatchPractice_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"adls_connection_linked_service_accountKey": {
+						"value": "[parameters('adls_connection_linked_service_accountKey')]"
+					},
+					"sql_database_connection_linked_service_connectionString": {
+						"value": "[parameters('sql_database_connection_linked_service_connectionString')]"
+					},
+					"adls_connection_linked_service_properties_typeProperties_url": {
+						"value": "[parameters('adls_connection_linked_service_properties_typeProperties_url')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "missionAzureDeBatchPractice_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'missionAzureDeBatchPractice_ArmTemplate_0')]"
+			]
+		},
+		{
+			"name": "missionAzureDeBatchPractice_ArmTemplate_2",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'missionAzureDeBatchPractice_ArmTemplate_1')]"
+			]
+		}
+	]
+}
