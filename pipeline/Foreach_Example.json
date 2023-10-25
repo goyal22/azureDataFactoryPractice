@@ -1,0 +1,82 @@
+{
+	"name": "Foreach_Example",
+	"properties": {
+		"activities": [
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@createArray('Customer','CustomerAddress')",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Customer_Customer address table data",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "JsonSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "JsonWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "sql_db_generic_table",
+									"type": "DatasetReference",
+									"parameters": {
+										"SchemaName": "SalesLt",
+										"TableName": {
+											"value": "@item()",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "adls_db_generic_json",
+									"type": "DatasetReference",
+									"parameters": {
+										"FilePath": {
+											"value": "@item()",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"folder": {
+			"name": "copy_multiple_table_using_for_each_pipeline"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-10-24T15:59:25Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

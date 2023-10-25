@@ -1,0 +1,20 @@
+{
+	"name": "sql_customer_table_data_set",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "sql_database_connection_linked_service",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "sql_data_set"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "SalesLT",
+			"table": "Customer"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

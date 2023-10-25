@@ -1,0 +1,45 @@
+{
+	"name": "copy_product_model_description",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "sql_database_connection_linked_service",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "sql_data_set"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ProductModelID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ProductDescriptionID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Culture",
+				"type": "nchar"
+			},
+			{
+				"name": "rowguid",
+				"type": "uniqueidentifier"
+			},
+			{
+				"name": "ModifiedDate",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "SalesLT",
+			"table": "ProductModelProductDescription"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

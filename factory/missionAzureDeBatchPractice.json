@@ -1,0 +1,9 @@
+{
+	"name": "missionAzureDeBatchPractice",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "f1d4e525-0b45-4705-8112-a0b6b3f16d6c",
+		"tenantId": "d0356561-f938-4524-9501-1178bb0f8dfa"
+	}
+}

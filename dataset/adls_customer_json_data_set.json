@@ -1,0 +1,23 @@
+{
+	"name": "adls_customer_json_data_set",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "adls_connection_linked_service",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "adls_data_Set"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "json",
+				"fileSystem": "landing"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

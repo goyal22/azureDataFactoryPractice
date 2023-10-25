@@ -1,0 +1,112 @@
+{
+	"name": "Foreach_Example_2",
+	"properties": {
+		"activities": [
+			{
+				"name": "Lookup for customer table",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "select count(*) as recordCount from SalesLt.Customer",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "sql_customer_table_data_set",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "check customer record",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Lookup for customer table",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@greater(activity('Lookup for customer table').output.firstRow.recordCount,100)",
+						"type": "Expression"
+					},
+					"ifTrueActivities": [
+						{
+							"name": "Copy data and create customer copy",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "AzureSqlSink",
+									"preCopyScript": "IF EXISTS (Select * from INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME='Customer_Copy')\nTRUNCATE TABLE SalesLT.Customer_Copy\nELSE \nSelect * into SalesLT.Customer_Copy from SalesLT.Customer",
+									"writeBehavior": "insert",
+									"sqlWriterUseTableLock": false,
+									"tableOption": "autoCreate",
+									"disableMetricsCollection": false
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "sql_customer_table_data_set",
+									"type": "DatasetReference"
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "sql_db_generic_table",
+									"type": "DatasetReference",
+									"parameters": {
+										"SchemaName": "SalesLT",
+										"TableName": "Customer_Copy"
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"folder": {
+			"name": "Assignment6"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-10-25T01:59:15Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

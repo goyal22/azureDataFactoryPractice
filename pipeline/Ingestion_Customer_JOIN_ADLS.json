@@ -1,0 +1,70 @@
+{
+	"name": "Ingestion_Customer_JOIN_ADLS",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy_customer_and_address",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "select  c.FirstName,c.LastName ,sa.addresstype, ad.addressLine1 from [SalesLt].[Customer] as  c  join [SalesLt].[CustomerAddress] as sa on c.CustomerID=sa.CustomerID Inner Join [SalesLt].[Address] as ad on sa.addressid = ad.addressid",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "sql_customer_table_data_set",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "adls_table_filename_generic",
+						"type": "DatasetReference",
+						"parameters": {
+							"FolderName": "JoinFolder",
+							"FileName": "customer_Address_join"
+						}
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "Assignment 5"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-10-24T15:37:15Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

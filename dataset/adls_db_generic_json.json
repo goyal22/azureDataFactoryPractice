@@ -1,0 +1,80 @@
+{
+	"name": "adls_db_generic_json",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "adls_connection_linked_service",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"FilePath": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "adls_data_Set"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@dataset().FilePath",
+					"type": "Expression"
+				},
+				"fileSystem": "landing"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"CustomerID": {
+					"type": "integer"
+				},
+				"NameStyle": {
+					"type": "boolean"
+				},
+				"Title": {
+					"type": "string"
+				},
+				"FirstName": {
+					"type": "string"
+				},
+				"MiddleName": {
+					"type": "string"
+				},
+				"LastName": {
+					"type": "string"
+				},
+				"Suffix": {
+					"type": "string"
+				},
+				"CompanyName": {
+					"type": "string"
+				},
+				"SalesPerson": {
+					"type": "string"
+				},
+				"EmailAddress": {
+					"type": "string"
+				},
+				"Phone": {
+					"type": "string"
+				},
+				"PasswordHash": {
+					"type": "string"
+				},
+				"PasswordSalt": {
+					"type": "string"
+				},
+				"rowguid": {
+					"type": "string"
+				},
+				"ModifiedDate": {
+					"type": "string"
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

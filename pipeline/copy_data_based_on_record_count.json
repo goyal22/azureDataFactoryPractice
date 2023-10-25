@@ -1,0 +1,134 @@
+{
+	"name": "copy_data_based_on_record_count",
+	"properties": {
+		"activities": [
+			{
+				"name": "copy_data_based_on_record_count",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "select count(*) AS recordCount from SalesLt.Customer",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "sql_customer_table_data_set",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "check_count_record_500",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "copy_data_based_on_record_count",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@greater(activity('copy_data_based_on_record_count').output.firstRow.recordCount , 500)",
+						"type": "Expression"
+					},
+					"ifTrueActivities": [
+						{
+							"name": "copy_customer_data",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "sql_customer_table_data_set",
+									"type": "DatasetReference"
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "adls_table_generic",
+									"type": "DatasetReference",
+									"parameters": {
+										"folderPath": "customerDataFromRun"
+									}
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"name": "copy_data_into_product_table_if_first_condition_true",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "check_count_record_500",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "child_product_copy_pipeline_based_on_condition",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "pipelines_if_lookup/parent"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-10-22T06:38:28Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

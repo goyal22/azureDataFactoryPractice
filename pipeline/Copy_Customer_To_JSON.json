@@ -1,0 +1,55 @@
+{
+	"name": "Copy_Customer_To_JSON",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy_Customer_To_JSON",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "JsonSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "JsonWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "sql_customer_table_data_set",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "adls_customer_json_data_set",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "copy_data_sql_to_adls_pipeline"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-10-22T07:11:37Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
