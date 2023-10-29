@@ -16,17 +16,18 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "adls_customer_csv2_folder",
+						"referenceName": "adls_customer_metaData",
 						"type": "DatasetReference"
 					},
 					"fieldList": [
 						"exists",
+						"childItems",
 						"itemName",
-						"itemType"
+						"itemType",
+						"lastModified"
 					],
 					"storeSettings": {
 						"type": "AzureBlobFSReadSettings",
-						"recursive": true,
 						"enablePartitionDiscovery": false
 					},
 					"formatSettings": {
