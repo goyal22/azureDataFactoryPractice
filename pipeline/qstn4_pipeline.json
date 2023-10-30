@@ -1,0 +1,211 @@
+{
+	"name": "qstn4_pipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "Get HighWater Mark Table Value",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "select Max(LastModifiedDate) as lastRunDate from SalesLt.HighWaterMark_Table",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "sql_db_generic_table",
+						"type": "DatasetReference",
+						"parameters": {
+							"SchemaName": "SalesLt",
+							"TableName": "HighWaterMark_Table"
+						}
+					}
+				}
+			},
+			{
+				"name": "PRODUCT DATA LAST MODIFIED DATE",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Get HighWater Mark Table Value",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "select Max(ModifiedDate) as lastRunDate from SalesLt.Product",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "sql_db_generic_table",
+						"type": "DatasetReference",
+						"parameters": {
+							"SchemaName": "SalesLt",
+							"TableName": "Product"
+						}
+					}
+				}
+			},
+			{
+				"name": "Copy data product to adls",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "PRODUCT DATA LAST MODIFIED DATE",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "select * from SalesLT.Product where ModifiedDate > '@{activity('Get HighWater Mark Table Value').output.firstRow.lastRunDate}' and ModifiedDate<='@{activity('PRODUCT DATA LAST MODIFIED DATE').output.firstRow.lastRunDate}'",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "sql_product_table_data_set",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "adls_table_filename_generic",
+						"type": "DatasetReference",
+						"parameters": {
+							"FolderName": "Assignment7_QSTN4",
+							"FileName": "SalesLt.Customer"
+						}
+					}
+				]
+			},
+			{
+				"name": "update value on adls",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Copy data product to adls",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "select '@{activity('PRODUCT DATA LAST MODIFIED DATE').output.firstRow.lastRunDate}' as LastModifiedDate",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "upsert",
+						"upsertSettings": {
+							"useTempDB": true,
+							"keys": [
+								"LastModifiedDate"
+							]
+						},
+						"sqlWriterUseTableLock": false,
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "sql_product_table_data_set",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "sql_db_generic_table",
+						"type": "DatasetReference",
+						"parameters": {
+							"SchemaName": "SalesLt",
+							"TableName": "HighWaterMark_Table"
+						}
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "Assignment 7"
+		},
+		"annotations": []
+	}
+}
