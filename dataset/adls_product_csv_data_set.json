@@ -13,7 +13,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "csv",
+				"fileName": "SalesLt.Product.txt",
+				"folderPath": "Product",
 				"fileSystem": "landing"
 			},
 			"columnDelimiter": ",",
