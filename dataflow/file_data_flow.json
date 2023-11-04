@@ -1,5 +1,5 @@
 {
-	"name": "dataflow1",
+	"name": "file_data_flow",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -9,7 +9,7 @@
 						"referenceName": "adls_product_csv_data_set",
 						"type": "DatasetReference"
 					},
-					"name": "source1"
+					"name": "ProductTableFlow"
 				}
 			],
 			"sinks": [
@@ -23,7 +23,7 @@
 			],
 			"transformations": [
 				{
-					"name": "filter1"
+					"name": "filterOnProductTable"
 				},
 				{
 					"name": "surrogateKey1"
@@ -59,9 +59,9 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     dateFormats: ['MM/dd/yyyy'],",
-				"     preferredIntegralType: 'short') ~> source1",
-				"source1 filter(ProductID>200) ~> filter1",
-				"filter1 keyGenerate(output(ExtrraKey as long),",
+				"     preferredIntegralType: 'short') ~> ProductTableFlow",
+				"ProductTableFlow filter(ProductID>200) ~> filterOnProductTable",
+				"filterOnProductTable keyGenerate(output(ExtrraKey as long),",
 				"     startAt: 1L,",
 				"     stepValue: 1L) ~> surrogateKey1",
 				"surrogateKey1 derive(BlackColorExists = equals(Color, 'Black')) ~> derivedColumn1",
