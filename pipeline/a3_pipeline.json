@@ -21,7 +21,7 @@
 						"datasetParameters": {
 							"sink1": {
 								"folderName": "assignment8",
-								"fileName": "join"
+								"fileName": "join.parquet "
 							}
 						}
 					},
