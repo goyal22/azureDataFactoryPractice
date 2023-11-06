@@ -1,0 +1,27 @@
+{
+	"name": "q4_data_flow",
+	"properties": {
+		"folder": {
+			"name": "assignment8"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "adls_product_csv_data_set",
+						"type": "DatasetReference"
+					},
+					"name": "productCsv"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> productCsv"
+			]
+		}
+	}
+}
