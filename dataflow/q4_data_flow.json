@@ -22,7 +22,15 @@
 					"name": "source1"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "adls_table_filename_generic",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "join1"
@@ -78,7 +86,14 @@
 				"filter1 aggregate(groupBy(ProductCategoryID),",
 				"     ListPrice = max(ListPrice)) ~> aggregate1",
 				"aggregate1 sort(desc(ProductCategoryID, true)) ~> sort1",
-				"join1 filter(notEquals(upper(toString(Color)),upper('blue'))) ~> filter1"
+				"join1 filter(notEquals(upper(toString(Color)),upper('blue'))) ~> filter1",
+				"sort1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
 		}
 	}
