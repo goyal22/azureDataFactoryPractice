@@ -13,14 +13,72 @@
 						"type": "DatasetReference"
 					},
 					"name": "productCsv"
+				},
+				{
+					"dataset": {
+						"referenceName": "data_flow_product_category",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
 				}
 			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "join1"
+				},
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "sort1"
+				},
+				{
+					"name": "filter1"
+				}
+			],
 			"scriptLines": [
-				"source(allowSchemaDrift: true,",
+				"source(output(",
+				"          ProductID as short,",
+				"          Name as string,",
+				"          ProductNumber as string,",
+				"          Color as string,",
+				"          StandardCost as double,",
+				"          ListPrice as double,",
+				"          Size as string,",
+				"          Weight as double,",
+				"          ProductCategoryID as short,",
+				"          ProductModelID as short,",
+				"          SellStartDate as string,",
+				"          SellEndDate as string,",
+				"          DiscontinuedDate as string,",
+				"          ThumbNailPhoto as string,",
+				"          ThumbnailPhotoFileName as string,",
+				"          rowguid as string,",
+				"          ModifiedDate as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> productCsv"
+				"     ignoreNoFilesFound: false) ~> productCsv",
+				"source(output(",
+				"          ProductCategoryID as string,",
+				"          ParentProductCategoryID as string,",
+				"          Name as string,",
+				"          rowguid as string,",
+				"          ModifiedDate as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"productCsv, source1 join(productCsv@ProductCategoryID == toInteger(source1@ProductCategoryID),",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"filter1 aggregate(groupBy(ProductCategoryID),",
+				"     ListPrice = max(ListPrice)) ~> aggregate1",
+				"aggregate1 sort(desc(ProductCategoryID, true)) ~> sort1",
+				"join1 filter(notEquals(upper(toString(Color)),upper('blue'))) ~> filter1"
 			]
 		}
 	}
