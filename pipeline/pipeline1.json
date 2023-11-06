@@ -17,13 +17,7 @@
 				"typeProperties": {
 					"dataflow": {
 						"referenceName": "q3_data_flow",
-						"type": "DataFlowReference",
-						"datasetParameters": {
-							"sink1": {
-								"FolderName": "assignment8",
-								"FileName": "Sales"
-							}
-						}
+						"type": "DataFlowReference"
 					},
 					"compute": {
 						"coreCount": 8,
