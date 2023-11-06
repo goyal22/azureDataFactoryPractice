@@ -27,6 +27,9 @@
 			"transformations": [
 				{
 					"name": "filter1"
+				},
+				{
+					"name": "select1"
 				}
 			],
 			"scriptLines": [
@@ -51,7 +54,19 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> customercsv",
 				"customercsv filter(toInteger(CustomerID) % 2 == 0) ~> filter1",
-				"filter1 sink(allowSchemaDrift: true,",
+				"filter1 select(mapColumn(",
+				"          CustomerID,",
+				"          NameStyle,",
+				"          Title,",
+				"          FirstName,",
+				"          MiddleName,",
+				"          LastName,",
+				"          EmailAddress,",
+				"          ModifiedDate",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     deletable:false,",
 				"     insertable:true,",
