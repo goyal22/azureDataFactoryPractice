@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "Q2DataFlow",
+						"referenceName": "q2_data_flow",
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"sink1": {

@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "Q1",
+						"referenceName": "q1_data_flow",
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"customerjson": {
