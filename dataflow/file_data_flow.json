@@ -1,6 +1,9 @@
 {
 	"name": "file_data_flow",
 	"properties": {
+		"folder": {
+			"name": "assignment8"
+		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [
