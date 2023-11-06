@@ -83,7 +83,7 @@
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join1",
-				"filter1 aggregate(groupBy(ProductCategoryID),",
+				"filter1 aggregate(groupBy(productCsv@ProductCategoryID),",
 				"     ListPrice = max(ListPrice)) ~> aggregate1",
 				"aggregate1 sort(desc(ProductCategoryID, true)) ~> sort1",
 				"join1 filter(notEquals(upper(toString(Color)),upper('blue'))) ~> filter1",
