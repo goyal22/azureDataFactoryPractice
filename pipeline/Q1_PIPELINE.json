@@ -17,7 +17,13 @@
 				"typeProperties": {
 					"dataflow": {
 						"referenceName": "Q1",
-						"type": "DataFlowReference"
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"customerjson": {
+								"SchemaName": "SalesLT",
+								"TableName": "Customer_Copy_Q1_As8"
+							}
+						}
 					},
 					"compute": {
 						"coreCount": 8,
