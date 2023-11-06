@@ -1,5 +1,5 @@
 {
-	"name": "data_flow_pipeline",
+	"name": "Q1_PIPELINE",
 	"properties": {
 		"activities": [
 			{
@@ -16,13 +16,8 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "file_data_flow",
-						"type": "DataFlowReference",
-						"datasetParameters": {
-							"sink1": {
-								"FilePath": "DataFlowFolder"
-							}
-						}
+						"referenceName": "Q1",
+						"type": "DataFlowReference"
 					},
 					"compute": {
 						"coreCount": 8,

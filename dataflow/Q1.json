@@ -18,7 +18,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "sql_db_generic_table",
+						"referenceName": "data_flow_sql",
 						"type": "DatasetReference"
 					},
 					"name": "customerjson"
@@ -27,12 +27,15 @@
 			"transformations": [
 				{
 					"name": "filter1"
+				},
+				{
+					"name": "select1"
 				}
 			],
 			"scriptLines": [
 				"source(output(",
-				"          CustomerID as string,",
-				"          NameStyle as string,",
+				"          CustomerID as short,",
+				"          NameStyle as boolean,",
 				"          Title as string,",
 				"          FirstName as string,",
 				"          MiddleName as string,",
@@ -50,10 +53,37 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> customercsv",
-				"customercsv filter(toInteger(CustomerID) % 2 == 0",
+				"select1 filter(toInteger(CustomerID) % 2 == 0",
 				") ~> filter1",
+				"customercsv select(mapColumn(",
+				"          CustomerID,",
+				"          NameStyle,",
+				"          Title,",
+				"          FirstName,",
+				"          MiddleName,",
+				"          LastName",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
 				"filter1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     input(",
+				"          CustomerID as integer,",
+				"          NameStyle as boolean,",
+				"          Title as string,",
+				"          FirstName as string,",
+				"          MiddleName as string,",
+				"          LastName as string,",
+				"          Suffix as string,",
+				"          CompanyName as string,",
+				"          SalesPerson as string,",
+				"          EmailAddress as string,",
+				"          Phone as string,",
+				"          PasswordHash as string,",
+				"          PasswordSalt as string,",
+				"          rowguid as string,",
+				"          ModifiedDate as timestamp",
+				"     ),",
 				"     deletable:false,",
 				"     insertable:true,",
 				"     updateable:false,",
