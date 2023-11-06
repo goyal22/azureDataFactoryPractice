@@ -1,5 +1,5 @@
 {
-	"name": "pipeline1",
+	"name": "a3_pipeline",
 	"properties": {
 		"activities": [
 			{
@@ -17,7 +17,13 @@
 				"typeProperties": {
 					"dataflow": {
 						"referenceName": "q3_data_flow",
-						"type": "DataFlowReference"
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"sink1": {
+								"folderName": "assignment8",
+								"fileName": "join"
+							}
+						}
 					},
 					"compute": {
 						"coreCount": 8,
