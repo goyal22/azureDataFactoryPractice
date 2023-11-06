@@ -80,6 +80,7 @@
 				"filter1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
+				"     partitionFileNames:['join'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
