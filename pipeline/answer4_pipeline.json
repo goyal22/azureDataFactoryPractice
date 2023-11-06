@@ -20,8 +20,8 @@
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"sink1": {
-								"FolderName": "assignement8",
-								"FileName": "test_data_flow"
+								"FolderName": "assi8",
+								"FileName": "test"
 							}
 						}
 					},
