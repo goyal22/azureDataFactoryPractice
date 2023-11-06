@@ -1,0 +1,45 @@
+{
+	"name": "q3_data_flow",
+	"properties": {
+		"folder": {
+			"name": "assignment8"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "sql_customer_table_data_set",
+						"type": "DatasetReference"
+					},
+					"name": "customerTable"
+				},
+				{
+					"dataset": {
+						"referenceName": "data_flow_customer_Address_dataset",
+						"type": "DatasetReference"
+					},
+					"name": "customerADDRESS"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> customerTable",
+				"source(output(",
+				"          CustomerID as string,",
+				"          AddressID as string,",
+				"          AddressType as string,",
+				"          rowguid as string,",
+				"          ModifiedDate as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> customerADDRESS"
+			]
+		}
+	}
+}

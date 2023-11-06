@@ -1,5 +1,5 @@
 {
-	"name": "data_flow_customer_dataset",
+	"name": "data_flow_customer_Address_dataset",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "adls_connection_linked_service",

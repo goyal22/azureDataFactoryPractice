@@ -16,7 +16,7 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "data_flow_customer_dataset",
+						"referenceName": "data_flow_customer_Address_dataset",
 						"type": "DatasetReference"
 					},
 					"name": "customerAddress"
