@@ -89,7 +89,7 @@
 				"join1 filter(notEquals(upper(toString(Color)),upper('blue'))) ~> filter1",
 				"sort1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     partitionFileNames:['test'],",
+				"     partitionFileNames:['product_flow'],",
 				"     truncate: true,",
 				"     umask: 0022,",
 				"     preCommands: [],",
