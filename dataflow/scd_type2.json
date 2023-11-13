@@ -6,7 +6,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "data_set_scd_typ1",
+						"referenceName": "adls_file_sc_typ2",
 						"type": "DatasetReference"
 					},
 					"name": "filesrc"
