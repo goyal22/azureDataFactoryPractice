@@ -117,6 +117,7 @@
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 1,",
 				"     errorHandlingOption: 'stopOnFirstError') ~> sink1",
 				"derivedColumn2 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
@@ -133,6 +134,7 @@
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 2,",
 				"     errorHandlingOption: 'stopOnFirstError') ~> sink2"
 			]
 		}
