@@ -1,0 +1,57 @@
+{
+	"name": "dataflow_json_file",
+	"properties": {
+		"folder": {
+			"name": "assignment8"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "duplicate_record_data_flow",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          EmployeeID as integer,",
+				"          FirstName as string,",
+				"          LastName as string,",
+				"          City as string,",
+				"          DateOfBirth as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'arrayOfDocuments') ~> source1",
+				"source1 aggregate(groupBy(EmployeeID,",
+				"          FirstName,",
+				"          LastName,",
+				"          City,",
+				"          DateOfBirth),",
+				"     count = count('1')) ~> aggregate1",
+				"aggregate1 select(mapColumn(",
+				"          EmployeeID,",
+				"          FirstName,",
+				"          LastName,",
+				"          City,",
+				"          DateOfBirth",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1"
+			]
+		}
+	}
+}
