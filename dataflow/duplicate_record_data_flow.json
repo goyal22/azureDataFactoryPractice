@@ -30,9 +30,6 @@
 				},
 				{
 					"name": "filter1"
-				},
-				{
-					"name": "select1"
 				}
 			],
 			"scriptLines": [
@@ -43,17 +40,10 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source1",
-				"source1 aggregate(groupBy(name,",
-				"          city),",
+				"source1 aggregate(groupBy(name),",
 				"     count = count(name)) ~> aggregate1",
 				"aggregate1 filter(count==1) ~> filter1",
-				"filter1 select(mapColumn(",
-				"          name,",
-				"          city",
-				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select1",
-				"select1 sink(allowSchemaDrift: true,",
+				"filter1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          CustomerID as integer,",
