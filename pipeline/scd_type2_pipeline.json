@@ -30,6 +30,8 @@
 		"folder": {
 			"name": "SCD"
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2023-11-20T13:51:48Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }
