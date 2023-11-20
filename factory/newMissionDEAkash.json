@@ -1,0 +1,9 @@
+{
+	"name": "newMissionDEAkash",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "5a3fe0c4-2ab6-4a16-b2c5-d95e87ada54a",
+		"tenantId": "62bfbd22-96d4-4b92-b3fd-9233e240917a"
+	}
+}
