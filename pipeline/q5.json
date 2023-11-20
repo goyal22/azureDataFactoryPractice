@@ -1,10 +1,10 @@
 {
-	"name": "GetMetaData_Example",
+	"name": "q5",
 	"properties": {
 		"activities": [
 			{
-				"name": "Get Metadata1",
-				"type": "GetMetadata",
+				"name": "Lookup1",
+				"type": "Lookup",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -15,21 +15,20 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
 					"dataset": {
-						"referenceName": "check_for_metadata_folder",
+						"referenceName": "chekc_csv_file_qstn5",
 						"type": "DatasetReference"
-					},
-					"fieldList": [
-						"childItems",
-						"exists"
-					],
-					"storeSettings": {
-						"type": "AzureBlobFSReadSettings",
-						"recursive": true,
-						"enablePartitionDiscovery": false
-					},
-					"formatSettings": {
-						"type": "DelimitedTextReadSettings"
 					}
 				}
 			}
@@ -38,7 +37,7 @@
 			"name": "Assignment 7"
 		},
 		"annotations": [],
-		"lastPublishTime": "2023-11-20T13:51:46Z"
+		"lastPublishTime": "2023-11-01T04:12:19Z"
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
 }

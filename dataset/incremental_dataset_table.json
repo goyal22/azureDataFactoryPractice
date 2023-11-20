@@ -19,5 +19,6 @@
 			"schema": "SalesLT",
 			"table": "High_Water_Concept_Data"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

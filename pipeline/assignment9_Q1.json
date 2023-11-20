@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy rest data from sink",
+				"name": "Copy data1",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -56,6 +56,8 @@
 		"folder": {
 			"name": "assignment 9"
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2023-11-20T13:51:47Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }
