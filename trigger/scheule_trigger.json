@@ -16,12 +16,12 @@
 			"recurrence": {
 				"frequency": "Day",
 				"interval": 1,
-				"startTime": "2023-11-20T06:29:00",
+				"startTime": "2023-11-20T17:29:00",
 				"endTime": "2023-11-21T12:48:00",
 				"timeZone": "India Standard Time",
 				"schedule": {
 					"minutes": [
-						30
+						32
 					],
 					"hours": [
 						18
