@@ -1,0 +1,33 @@
+{
+	"name": "schedule_trigger",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "assignment9_Q1",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2023-11-20T14:33:00",
+				"timeZone": "India Standard Time",
+				"schedule": {
+					"minutes": [
+						10,
+						15
+					],
+					"hours": [
+						20
+					]
+				}
+			}
+		}
+	}
+}
