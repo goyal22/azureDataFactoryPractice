@@ -65,7 +65,10 @@
 									"referenceName": "adls_table_filename_generic",
 									"type": "DatasetReference",
 									"parameters": {
-										"FolderName": "RestCountry",
+										"FolderName": {
+											"value": "@item()",
+											"type": "Expression"
+										},
 										"FileName": {
 											"value": "@item()",
 											"type": "Expression"
