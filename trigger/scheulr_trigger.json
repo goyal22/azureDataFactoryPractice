@@ -22,7 +22,8 @@
 				"schedule": {
 					"minutes": [
 						42,
-						48
+						48,
+						52
 					],
 					"hours": [
 						18
