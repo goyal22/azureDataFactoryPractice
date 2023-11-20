@@ -9,6 +9,12 @@
 					"referenceName": "q3_solution_assignment9",
 					"type": "PipelineReference"
 				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "assignment9_Q1",
+					"type": "PipelineReference"
+				}
 			}
 		],
 		"type": "ScheduleTrigger",
