@@ -2,7 +2,7 @@
 	"name": "parametized_rest_data_set",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "rest_linked_service",
+			"referenceName": "parametized_linkd_service",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
