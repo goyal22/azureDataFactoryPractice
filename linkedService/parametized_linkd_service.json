@@ -1,15 +1,10 @@
 {
 	"name": "parametized_linkd_service",
 	"properties": {
-		"parameters": {
-			"paramValue": {
-				"type": "string"
-			}
-		},
 		"annotations": [],
 		"type": "RestService",
 		"typeProperties": {
-			"url": "@{https://restcountries.com/v3.1/name/linkedService().paramValue}",
+			"url": "https://restcountries.com/v3.1/name",
 			"enableServerCertificateValidation": true,
 			"authenticationType": "Anonymous"
 		}
