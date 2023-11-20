@@ -17,12 +17,12 @@
 				"frequency": "Day",
 				"interval": 1,
 				"startTime": "2023-11-20T13:04:00",
-				"endTime": "2023-11-30T13:04:00",
+				"endTime": "2023-11-21T13:04:00",
 				"timeZone": "India Standard Time",
 				"schedule": {
 					"minutes": [
-						39,
-						42
+						42,
+						45
 					],
 					"hours": [
 						18
