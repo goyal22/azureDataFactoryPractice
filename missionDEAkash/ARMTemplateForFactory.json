@@ -1637,45 +1637,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/scheduled_triggers')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "assignment9_Q1",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
-				"type": "ScheduleTrigger",
-				"typeProperties": {
-					"recurrence": {
-						"frequency": "Day",
-						"interval": 2,
-						"startTime": "2023-11-20T13:59:00",
-						"timeZone": "India Standard Time",
-						"schedule": {
-							"minutes": [
-								35,
-								40
-							],
-							"hours": [
-								19
-							]
-						}
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/assignment9_Q1')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/scd_type2_data_flow')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -1821,6 +1782,44 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/adls_file_sc_typ2')]",
 				"[concat(variables('factoryId'), '/datasets/dataset_scd_type2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sch_trigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "assignment9_Q1",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 2,
+						"startTime": "2023-11-20T15:23:00",
+						"timeZone": "India Standard Time",
+						"schedule": {
+							"minutes": [
+								58
+							],
+							"hours": [
+								20
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/assignment9_Q1')]"
 			]
 		}
 	]
