@@ -1,0 +1,34 @@
+{
+	"name": "scheulr_trigger",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "q3_solution_assignment9",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2023-11-20T13:04:00",
+				"endTime": "2023-11-30T13:04:00",
+				"timeZone": "India Standard Time",
+				"schedule": {
+					"minutes": [
+						41,
+						39
+					],
+					"hours": [
+						18
+					]
+				}
+			}
+		}
+	}
+}
