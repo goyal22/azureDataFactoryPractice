@@ -1,0 +1,9 @@
+{
+	"name": "missionADFPracticeAkash",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "dada07c4-408b-474e-a0b4-a0c29132ab75",
+		"tenantId": "4d7ad57d-8b67-4163-9b63-3a6290898fc8"
+	}
+}
