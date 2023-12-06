@@ -13,7 +13,10 @@
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "lastModifiedDate",
-					"value": "@{formatDateTime(utcnow(), 'yyyy-MM-ddTHH:mm:ssZ')"
+					"value": {
+						"value": "'1900-01-01 00:00:00'",
+						"type": "Expression"
+					}
 				}
 			},
 			{
@@ -71,7 +74,7 @@
 					"source": {
 						"type": "AzureSqlSource",
 						"sqlReaderQuery": {
-							"value": "select * from salesLT.CustomerAddress where ModifiedDate > '@{activity('LookupMaxLastModifiedDate').output.firstRow.lastRunDate}' and ModifiedDate <= '@{variables('lastModifiedDate')}'",
+							"value": "select * from salesLT.CustomerAddress where ModifiedDate <= '@{activity('LookupMaxLastModifiedDate').output.firstRow.LastModifiedDate}' and ModifiedDate > @{variables('lastModifiedDate')}",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
