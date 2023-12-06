@@ -171,9 +171,9 @@
 				]
 			}
 		],
-		"parameters": {
+		"variables": {
 			"lastModifiedDate": {
-				"type": "string"
+				"type": "String"
 			}
 		},
 		"folder": {
