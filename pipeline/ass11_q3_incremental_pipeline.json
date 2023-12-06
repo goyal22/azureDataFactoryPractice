@@ -1,5 +1,5 @@
 {
-	"name": "pipleine_using_set_",
+	"name": "ass11_q3_incremental_pipeline",
 	"properties": {
 		"activities": [
 			{
@@ -106,6 +106,30 @@
 						}
 					}
 				]
+			},
+			{
+				"name": "update_value",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Copy data1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "lastModifiedDate",
+					"value": {
+						"value": "@activity('LookupMaxLastModifiedDate').output.firstRow.LastModifiedDate",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"variables": {
