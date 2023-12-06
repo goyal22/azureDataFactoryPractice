@@ -544,13 +544,6 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {}
-					},
-					{
-						"pipelineReference": {
-							"referenceName": "child_assignment_11_q2",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
 					}
 				],
 				"type": "ScheduleTrigger",
@@ -562,7 +555,7 @@
 						"timeZone": "India Standard Time",
 						"schedule": {
 							"minutes": [
-								10
+								12
 							],
 							"hours": [
 								21
