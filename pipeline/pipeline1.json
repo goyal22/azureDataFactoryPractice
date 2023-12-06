@@ -14,7 +14,7 @@
 				"typeProperties": {
 					"variableName": "lastModifiedDate",
 					"value": {
-						"value": "@activity('read date from file').output.firstRow.Prop_0",
+						"value": "1900-01-01 00:00:00",
 						"type": "Expression"
 					}
 				}
@@ -108,8 +108,8 @@
 				]
 			},
 			{
-				"name": "Update Hwf",
-				"type": "Copy",
+				"name": "Set variable1",
+				"type": "SetVariable",
 				"dependsOn": [
 					{
 						"activity": "Copy data1",
@@ -119,56 +119,17 @@
 					}
 				],
 				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
 					"secureOutput": false,
 					"secureInput": false
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"source": {
-						"type": "AzureSqlSource",
-						"sqlReaderQuery": {
-							"value": "select '@{activity('LookupMaxLastModifiedDate').output.firstRow.LastModifiedDate}'",
-							"type": "Expression"
-						},
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
-					},
-					"sink": {
-						"type": "DelimitedTextSink",
-						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings"
-						},
-						"formatSettings": {
-							"type": "DelimitedTextWriteSettings",
-							"quoteAllText": true,
-							"fileExtension": ".txt"
-						}
-					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
-						}
+					"variableName": "lastModifiedDate",
+					"value": {
+						"value": "@activity('LookupMaxLastModifiedDate').output.firstRow.LastModifiedDate",
+						"type": "Expression"
 					}
-				},
-				"inputs": [
-					{
-						"referenceName": "sql_customer_table_data_set",
-						"type": "DatasetReference"
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "data_set_for_imcremntal_file",
-						"type": "DatasetReference"
-					}
-				]
+				}
 			}
 		],
 		"variables": {
