@@ -1,9 +1,9 @@
 {
-	"name": "pipleine_using_set_var",
+	"name": "pipleine_using_set_",
 	"properties": {
 		"activities": [
 			{
-				"name": "Set variable1",
+				"name": "readLastmodifiedDte",
 				"type": "SetVariable",
 				"dependsOn": [],
 				"policy": {
@@ -12,24 +12,8 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "pipelineReturnValue",
-					"value": [
-						{
-							"key": "lastModifiedDate",
-							"value": {
-								"type": "String",
-								"content": "@{formatDateTime(utcnow(), 'yyyy-MM-ddTHH:mm:ssZ')}"
-							}
-						},
-						{
-							"key": "highWaterMarkDate",
-							"value": {
-								"type": "String",
-								"content": "@variables('lastModifiedDate')"
-							}
-						}
-					],
-					"setSystemVariable": true
+					"variableName": "lastModifiedDate",
+					"value": "@{formatDateTime(utcnow(), 'yyyy-MM-ddTHH:mm:ssZ')"
 				}
 			},
 			{
@@ -37,7 +21,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "Set variable1",
+						"activity": "readLastmodifiedDte",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -65,8 +49,8 @@
 				}
 			},
 			{
-				"name": "If Condition1",
-				"type": "IfCondition",
+				"name": "Copy data1",
+				"type": "Copy",
 				"dependsOn": [
 					{
 						"activity": "LookupMaxLastModifiedDate",
@@ -75,15 +59,58 @@
 						]
 					}
 				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
-					"expression": {
-						"value": "@greater(activity('LookupMaxLastModifiedDate').output.firstRow.maxLastModifiedDate, variables('highWaterMarkDate'))",
-						"type": "Expression"
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "select * from salesLT.CustomerAddress where ModifiedDate > '@{activity('LookupMaxLastModifiedDate').output.firstRow.lastRunDate}' and ModifiedDate <= '@{variables('lastModifiedDate')}'",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "JsonSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "JsonWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "sql_customer_table_data_set",
+						"type": "DatasetReference"
 					}
-				}
+				],
+				"outputs": [
+					{
+						"referenceName": "adls_db_generic_json",
+						"type": "DatasetReference",
+						"parameters": {
+							"FilePath": "test"
+						}
+					}
+				]
 			}
 		],
+		"variables": {
+			"lastModifiedDate": {
+				"type": "String",
+				"defaultValue": "null"
+			}
+		},
 		"folder": {
 			"name": "assignment11"
 		},
