@@ -9,12 +9,6 @@
 					"referenceName": "ass11_q2",
 					"type": "PipelineReference"
 				}
-			},
-			{
-				"pipelineReference": {
-					"referenceName": "child_assignment_11_q2",
-					"type": "PipelineReference"
-				}
 			}
 		],
 		"type": "ScheduleTrigger",
