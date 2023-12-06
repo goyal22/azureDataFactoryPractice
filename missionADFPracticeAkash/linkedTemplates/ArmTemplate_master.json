@@ -40,6 +40,22 @@
 			"type": "string",
 			"defaultValue": "https://restcountries.com/v3.1/all"
 		},
+		"DailyTrigger_Product_properties_ass11_Q1_parameters_TableName": {
+			"type": "string",
+			"defaultValue": "CustomerAddress"
+		},
+		"DailyTrigger_Product_properties_ass11_Q1_parameters_FolderName": {
+			"type": "string",
+			"defaultValue": "trigger1"
+		},
+		"product_trigger_properties_ass11_Q1_parameters_TableName": {
+			"type": "string",
+			"defaultValue": "Product"
+		},
+		"product_trigger_properties_ass11_Q1_parameters_FolderName": {
+			"type": "string",
+			"defaultValue": "trigger2"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -188,6 +204,18 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"product_trigger_properties_ass11_Q1_parameters_TableName": {
+						"value": "[parameters('product_trigger_properties_ass11_Q1_parameters_TableName')]"
+					},
+					"product_trigger_properties_ass11_Q1_parameters_FolderName": {
+						"value": "[parameters('product_trigger_properties_ass11_Q1_parameters_FolderName')]"
+					},
+					"DailyTrigger_Product_properties_ass11_Q1_parameters_TableName": {
+						"value": "[parameters('DailyTrigger_Product_properties_ass11_Q1_parameters_TableName')]"
+					},
+					"DailyTrigger_Product_properties_ass11_Q1_parameters_FolderName": {
+						"value": "[parameters('DailyTrigger_Product_properties_ass11_Q1_parameters_FolderName')]"
 					}
 				}
 			},

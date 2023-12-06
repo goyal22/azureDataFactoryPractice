@@ -39,6 +39,22 @@
 		"rest_linked_service_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://restcountries.com/v3.1/all"
+		},
+		"DailyTrigger_Product_properties_ass11_Q1_parameters_TableName": {
+			"type": "string",
+			"defaultValue": "CustomerAddress"
+		},
+		"DailyTrigger_Product_properties_ass11_Q1_parameters_FolderName": {
+			"type": "string",
+			"defaultValue": "trigger1"
+		},
+		"product_trigger_properties_ass11_Q1_parameters_TableName": {
+			"type": "string",
+			"defaultValue": "Product"
+		},
+		"product_trigger_properties_ass11_Q1_parameters_FolderName": {
+			"type": "string",
+			"defaultValue": "trigger2"
 		}
 	},
 	"variables": {
@@ -7725,6 +7741,16 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "ass11_Q1",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"TableName": "[parameters('DailyTrigger_Product_properties_ass11_Q1_parameters_TableName')]",
+							"FolderName": "[parameters('DailyTrigger_Product_properties_ass11_Q1_parameters_FolderName')]"
+						}
 					}
 				],
 				"type": "ScheduleTrigger",
@@ -7736,7 +7762,7 @@
 						"timeZone": "India Standard Time",
 						"schedule": {
 							"minutes": [
-								12
+								35
 							],
 							"hours": [
 								21
@@ -7746,7 +7772,8 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/ass11_q2')]"
+				"[concat(variables('factoryId'), '/pipelines/ass11_q2')]",
+				"[concat(variables('factoryId'), '/pipelines/ass11_Q1')]"
 			]
 		},
 		{
@@ -8497,6 +8524,47 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/adls_file_sc_typ2')]",
 				"[concat(variables('factoryId'), '/datasets/dataset_scd_type2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/product_trigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "ass11_Q1",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"TableName": "[parameters('product_trigger_properties_ass11_Q1_parameters_TableName')]",
+							"FolderName": "[parameters('product_trigger_properties_ass11_Q1_parameters_FolderName')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2023-12-06T15:53:00",
+						"timeZone": "India Standard Time",
+						"schedule": {
+							"minutes": [
+								35
+							],
+							"hours": [
+								21
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/ass11_Q1')]"
 			]
 		}
 	]

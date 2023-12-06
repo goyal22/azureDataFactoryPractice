@@ -29,6 +29,18 @@
 		"rest_linked_service_properties_typeProperties_url": {
 			"value": "https://restcountries.com/v3.1/all"
 		},
+		"DailyTrigger_Product_properties_ass11_Q1_parameters_TableName": {
+			"value": "CustomerAddress"
+		},
+		"DailyTrigger_Product_properties_ass11_Q1_parameters_FolderName": {
+			"value": "trigger1"
+		},
+		"product_trigger_properties_ass11_Q1_parameters_TableName": {
+			"value": "Product"
+		},
+		"product_trigger_properties_ass11_Q1_parameters_FolderName": {
+			"value": "trigger2"
+		},
 		"containerUri": {
 			"value": ""
 		},
