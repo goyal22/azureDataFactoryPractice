@@ -3,7 +3,18 @@
 	"properties": {
 		"annotations": [],
 		"runtimeState": "Stopped",
-		"pipelines": [],
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "ass11_Q1",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"TableName": "fsd",
+					"FolderName": "sada"
+				}
+			}
+		],
 		"type": "ScheduleTrigger",
 		"typeProperties": {
 			"recurrence": {
