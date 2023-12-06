@@ -33,7 +33,7 @@
 				}
 			},
 			{
-				"name": "Lookup1",
+				"name": "LookupMaxLastModifiedDate",
 				"type": "Lookup",
 				"dependsOn": [
 					{
@@ -69,7 +69,7 @@
 				"type": "IfCondition",
 				"dependsOn": [
 					{
-						"activity": "Lookup1",
+						"activity": "LookupMaxLastModifiedDate",
 						"dependencyConditions": [
 							"Succeeded"
 						]
