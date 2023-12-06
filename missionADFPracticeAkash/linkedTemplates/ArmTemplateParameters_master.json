@@ -1,0 +1,39 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "missionADFPracticeAkash"
+		},
+		"adls_connection_linked_service_accountKey": {
+			"value": ""
+		},
+		"sql_database_connection_linked_service_connectionString": {
+			"value": ""
+		},
+		"sql_parameterized_lk_service_connectionString": {
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=missionazure2023.database.windows.net;Initial Catalog=@{linkedService().databaseName};User ID=@{linkedService().userName}"
+		},
+		"sql_parametrized_linked_service_connectionString": {
+			"value": ""
+		},
+		"adls_connection_linked_service_properties_typeProperties_url": {
+			"value": "https://missionadlsakash.dfs.core.windows.net"
+		},
+		"keyVault_properties_typeProperties_baseUrl": {
+			"value": "https://sqlDbPswd.vault.azure.net/"
+		},
+		"parametized_linkd_service_properties_typeProperties_url": {
+			"value": "https://restcountries.com/v3.1/name"
+		},
+		"rest_linked_service_properties_typeProperties_url": {
+			"value": "https://restcountries.com/v3.1/all"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}

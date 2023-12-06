@@ -1,0 +1,199 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "missionADFPracticeAkash"
+		},
+		"adls_connection_linked_service_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'adls_connection_linked_service'"
+		},
+		"sql_database_connection_linked_service_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'sql_database_connection_linked_service'"
+		},
+		"sql_parameterized_lk_service_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'sql_parameterized_lk_service'",
+			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=missionazure2023.database.windows.net;Initial Catalog=@{linkedService().databaseName};User ID=@{linkedService().userName}"
+		},
+		"sql_parametrized_linked_service_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'sql_parametrized_linked_service'"
+		},
+		"adls_connection_linked_service_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://missionadlsakash.dfs.core.windows.net"
+		},
+		"keyVault_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://sqlDbPswd.vault.azure.net/"
+		},
+		"parametized_linkd_service_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://restcountries.com/v3.1/name"
+		},
+		"rest_linked_service_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://restcountries.com/v3.1/all"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "missionADFPracticeAkash_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"adls_connection_linked_service_accountKey": {
+						"value": "[parameters('adls_connection_linked_service_accountKey')]"
+					},
+					"sql_database_connection_linked_service_connectionString": {
+						"value": "[parameters('sql_database_connection_linked_service_connectionString')]"
+					},
+					"sql_parametrized_linked_service_connectionString": {
+						"value": "[parameters('sql_parametrized_linked_service_connectionString')]"
+					},
+					"adls_connection_linked_service_properties_typeProperties_url": {
+						"value": "[parameters('adls_connection_linked_service_properties_typeProperties_url')]"
+					},
+					"keyVault_properties_typeProperties_baseUrl": {
+						"value": "[parameters('keyVault_properties_typeProperties_baseUrl')]"
+					},
+					"parametized_linkd_service_properties_typeProperties_url": {
+						"value": "[parameters('parametized_linkd_service_properties_typeProperties_url')]"
+					},
+					"rest_linked_service_properties_typeProperties_url": {
+						"value": "[parameters('rest_linked_service_properties_typeProperties_url')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "missionADFPracticeAkash_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'missionADFPracticeAkash_ArmTemplate_0')]"
+			]
+		},
+		{
+			"name": "missionADFPracticeAkash_ArmTemplate_2",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"sql_parameterized_lk_service_connectionString": {
+						"value": "[parameters('sql_parameterized_lk_service_connectionString')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'missionADFPracticeAkash_ArmTemplate_1')]"
+			]
+		},
+		{
+			"name": "missionADFPracticeAkash_ArmTemplate_3",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_3.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'missionADFPracticeAkash_ArmTemplate_2')]"
+			]
+		},
+		{
+			"name": "missionADFPracticeAkash_ArmTemplate_4",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_4.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'missionADFPracticeAkash_ArmTemplate_3')]"
+			]
+		},
+		{
+			"name": "missionADFPracticeAkash_ArmTemplate_5",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_5.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'missionADFPracticeAkash_ArmTemplate_4')]"
+			]
+		}
+	]
+}
