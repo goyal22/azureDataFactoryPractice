@@ -18,7 +18,7 @@
 					"source": {
 						"type": "AzureSqlSource",
 						"sqlReaderQuery": {
-							"value": "select * from salesLT.customer WHERE lastModifiedDatepipeline()..startDate BETWEEN '@{pipeline().parameters.startDate}' and '@{pipeline().parameters.EndDate}'",
+							"value": "select * from [SalesLT].[Customer] WHERE ModifiedDate BETWEEN '@{pipeline().parameters.startDate}' and '@{pipeline().parameters.EndDate}'",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
