@@ -121,7 +121,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "customerRecord",
+					"variableName": "",
 					"value": {
 						"value": "@activity('customer_record').output.firstRow.recordCount",
 						"type": "Expression"
@@ -129,9 +129,10 @@
 				}
 			}
 		],
-		"variables": {
-			"customerRecord": {
-				"type": "Integer"
+		"parameters": {
+			"customer_count": {
+				"type": "string",
+				"defaultValue": "0"
 			}
 		},
 		"folder": {
