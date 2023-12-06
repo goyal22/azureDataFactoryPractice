@@ -10,8 +10,8 @@
 					"type": "PipelineReference"
 				},
 				"parameters": {
-					"TableName": "fsd",
-					"FolderName": "sada"
+					"TableName": "Product",
+					"FolderName": "Product"
 				}
 			}
 		],
