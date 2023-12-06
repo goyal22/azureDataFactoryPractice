@@ -1,0 +1,25 @@
+{
+	"name": "DailyTrigger_Product",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2023-12-06T15:28:00",
+				"timeZone": "India Standard Time",
+				"schedule": {
+					"minutes": [
+						6
+					],
+					"hours": [
+						21
+					]
+				}
+			}
+		}
+	}
+}
