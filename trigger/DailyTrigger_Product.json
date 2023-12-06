@@ -9,6 +9,16 @@
 					"referenceName": "ass11_q2",
 					"type": "PipelineReference"
 				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "ass11_Q1",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"TableName": "CustomerAddress",
+					"FolderName": "CustomerAddress"
+				}
 			}
 		],
 		"type": "ScheduleTrigger",
