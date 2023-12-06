@@ -129,8 +129,8 @@
 				}
 			},
 			{
-				"name": "If Condition2",
-				"type": "IfCondition",
+				"name": "Execute Pipeline2",
+				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
 						"activity": "If Condition1",
@@ -141,25 +141,17 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"expression": {
-						"value": "@greaterOrEquals(variables('customer_record'),500)",
-						"type": "Expression"
+					"pipeline": {
+						"referenceName": "child_assignment_11_q2",
+						"type": "PipelineReference"
 					},
-					"ifTrueActivities": [
-						{
-							"name": "Execute Pipeline1",
-							"type": "ExecutePipeline",
-							"dependsOn": [],
-							"userProperties": [],
-							"typeProperties": {
-								"pipeline": {
-									"referenceName": "Copy_ProductTable_To_CSV",
-									"type": "PipelineReference"
-								},
-								"waitOnCompletion": true
-							}
+					"waitOnCompletion": true,
+					"parameters": {
+						"recordCount": {
+							"value": "@variables('customer_record')",
+							"type": "Expression"
 						}
-					]
+					}
 				}
 			}
 		],
