@@ -41,7 +41,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "\n@greater(variables('customerRecord'),500)",
+						"value": "@greater(activity('customer_record').output.firstRow.recordCount , 500)",
 						"type": "Expression"
 					},
 					"ifTrueActivities": [
@@ -121,18 +121,52 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "",
+					"variableName": "customer_record",
 					"value": {
 						"value": "@activity('customer_record').output.firstRow.recordCount",
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "If Condition2",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "If Condition1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@greaterOrEquals(variables('customer_record'),500)",
+						"type": "Expression"
+					},
+					"ifTrueActivities": [
+						{
+							"name": "Execute Pipeline1",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "Copy_ProductTable_To_CSV",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true
+							}
+						}
+					]
+				}
 			}
 		],
-		"parameters": {
-			"customer_count": {
-				"type": "string",
-				"defaultValue": "0"
+		"variables": {
+			"customer_record": {
+				"type": "Integer",
+				"defaultValue": 0
 			}
 		},
 		"folder": {
