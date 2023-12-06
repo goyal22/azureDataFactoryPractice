@@ -17,7 +17,7 @@
 				},
 				"parameters": {
 					"TableName": "CustomerAddress",
-					"FolderName": "CustomerAddress"
+					"FolderName": "trigger1"
 				}
 			}
 		],
