@@ -5,7 +5,14 @@
 			{
 				"name": "readLastmodifiedDte",
 				"type": "SetVariable",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "read date from file",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"secureOutput": false,
 					"secureInput": false
@@ -14,7 +21,7 @@
 				"typeProperties": {
 					"variableName": "lastModifiedDate",
 					"value": {
-						"value": "'1900-01-01 00:00:00'",
+						"value": "@activity('read date from file').output.firstRow.Prop_0",
 						"type": "Expression"
 					}
 				}
@@ -74,7 +81,7 @@
 					"source": {
 						"type": "AzureSqlSource",
 						"sqlReaderQuery": {
-							"value": "select * from salesLT.CustomerAddress where ModifiedDate <= '@{activity('LookupMaxLastModifiedDate').output.firstRow.LastModifiedDate}' and ModifiedDate > @{variables('lastModifiedDate')}",
+							"value": "select * from salesLT.CustomerAddress where ModifiedDate <= '@{activity('LookupMaxLastModifiedDate').output.firstRow.LastModifiedDate}' and ModifiedDate > '@{variables('lastModifiedDate')}'\n\n\n",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
@@ -108,8 +115,38 @@
 				]
 			},
 			{
-				"name": "update_value",
-				"type": "SetVariable",
+				"name": "read date from file",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"dataset": {
+						"referenceName": "data_set_for_imcremntal_file",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Update Hwf",
+				"type": "Copy",
 				"dependsOn": [
 					{
 						"activity": "Copy data1",
@@ -119,17 +156,56 @@
 					}
 				],
 				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
 					"secureOutput": false,
 					"secureInput": false
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "lastModifiedDate",
-					"value": {
-						"value": "@activity('LookupMaxLastModifiedDate').output.firstRow.LastModifiedDate",
-						"type": "Expression"
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "select '@{activity('LookupMaxLastModifiedDate').output.firstRow.LastModifiedDate}'",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
 					}
-				}
+				},
+				"inputs": [
+					{
+						"referenceName": "sql_customer_table_data_set",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "data_set_for_imcremntal_file",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"variables": {
