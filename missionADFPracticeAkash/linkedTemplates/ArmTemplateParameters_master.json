@@ -8,6 +8,9 @@
 		"adls_connection_linked_service_accountKey": {
 			"value": ""
 		},
+		"data_from_on_prem_password": {
+			"value": ""
+		},
 		"sql_database_connection_linked_service_connectionString": {
 			"value": ""
 		},
@@ -19,6 +22,12 @@
 		},
 		"adls_connection_linked_service_properties_typeProperties_url": {
 			"value": "https://missionadlsakash.dfs.core.windows.net"
+		},
+		"data_from_on_prem_properties_typeProperties_host": {
+			"value": "C:\\data"
+		},
+		"data_from_on_prem_properties_typeProperties_userId": {
+			"value": "vm123"
 		},
 		"keyVault_properties_typeProperties_baseUrl": {
 			"value": "https://sqlDbPswd.vault.azure.net/"

@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'adls_connection_linked_service'"
 		},
+		"data_from_on_prem_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'data_from_on_prem'"
+		},
 		"sql_database_connection_linked_service_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'sql_database_connection_linked_service'"
@@ -27,6 +31,14 @@
 		"adls_connection_linked_service_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://missionadlsakash.dfs.core.windows.net"
+		},
+		"data_from_on_prem_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "C:\\data"
+		},
+		"data_from_on_prem_properties_typeProperties_userId": {
+			"type": "string",
+			"defaultValue": "vm123"
 		},
 		"keyVault_properties_typeProperties_baseUrl": {
 			"type": "string",
@@ -4790,6 +4802,82 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "FileServerReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"tableOption": "autoCreate",
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "on_prem_file",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "sql_db_generic_table",
+								"type": "DatasetReference",
+								"parameters": {
+									"SchemaName": "SaalesLt",
+									"TableName": "EmployeeOnPrem"
+								}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/on_prem_file')]",
+				"[concat(variables('factoryId'), '/datasets/sql_db_generic_table')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/q3_solution_assignment9')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -7272,6 +7360,66 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/on_prem_file')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "data_from_on_prem",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "FileServerLocation",
+						"fileName": "EmployeeData-oDgk5E7eX9-SvQqmI59Xr.csv"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "id",
+						"type": "String"
+					},
+					{
+						"name": "first_name",
+						"type": "String"
+					},
+					{
+						"name": "last_name",
+						"type": "String"
+					},
+					{
+						"name": "email",
+						"type": "String"
+					},
+					{
+						"name": "gender",
+						"type": "String"
+					},
+					{
+						"name": "salary",
+						"type": "String"
+					},
+					{
+						"name": "creationDate",
+						"type": "String"
+					},
+					{
+						"name": "bonus",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/data_from_on_prem')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/parametized_rest_data_set')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -7620,6 +7768,30 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/data_from_on_prem')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "FileServer",
+				"typeProperties": {
+					"host": "[parameters('data_from_on_prem_properties_typeProperties_host')]",
+					"userId": "[parameters('data_from_on_prem_properties_typeProperties_userId')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('data_from_on_prem_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "selfHostedRT",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/selfHostedRT')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/keyVault')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -7775,6 +7947,57 @@
 				"[concat(variables('factoryId'), '/pipelines/ass11_q2')]",
 				"[concat(variables('factoryId'), '/pipelines/ass11_Q1')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/product_trigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "ass11_Q1",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"TableName": "[parameters('product_trigger_properties_ass11_Q1_parameters_TableName')]",
+							"FolderName": "[parameters('product_trigger_properties_ass11_Q1_parameters_FolderName')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2023-12-06T15:53:00",
+						"timeZone": "India Standard Time",
+						"schedule": {
+							"minutes": [
+								35
+							],
+							"hours": [
+								21
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/ass11_Q1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/selfHostedRT')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/duplicate_record_data_flow')]",
@@ -8524,47 +8747,6 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/adls_file_sc_typ2')]",
 				"[concat(variables('factoryId'), '/datasets/dataset_scd_type2')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/product_trigger')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Stopped",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "ass11_Q1",
-							"type": "PipelineReference"
-						},
-						"parameters": {
-							"TableName": "[parameters('product_trigger_properties_ass11_Q1_parameters_TableName')]",
-							"FolderName": "[parameters('product_trigger_properties_ass11_Q1_parameters_FolderName')]"
-						}
-					}
-				],
-				"type": "ScheduleTrigger",
-				"typeProperties": {
-					"recurrence": {
-						"frequency": "Day",
-						"interval": 1,
-						"startTime": "2023-12-06T15:53:00",
-						"timeZone": "India Standard Time",
-						"schedule": {
-							"minutes": [
-								35
-							],
-							"hours": [
-								21
-							]
-						}
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/ass11_Q1')]"
 			]
 		}
 	]

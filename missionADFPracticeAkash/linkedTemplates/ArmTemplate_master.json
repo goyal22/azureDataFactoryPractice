@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'adls_connection_linked_service'"
 		},
+		"data_from_on_prem_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'data_from_on_prem'"
+		},
 		"sql_database_connection_linked_service_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'sql_database_connection_linked_service'"
@@ -27,6 +31,14 @@
 		"adls_connection_linked_service_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://missionadlsakash.dfs.core.windows.net"
+		},
+		"data_from_on_prem_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "C:\\data"
+		},
+		"data_from_on_prem_properties_typeProperties_userId": {
+			"type": "string",
+			"defaultValue": "vm123"
 		},
 		"keyVault_properties_typeProperties_baseUrl": {
 			"type": "string",
@@ -142,8 +154,17 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
+					"data_from_on_prem_password": {
+						"value": "[parameters('data_from_on_prem_password')]"
+					},
 					"sql_parameterized_lk_service_connectionString": {
 						"value": "[parameters('sql_parameterized_lk_service_connectionString')]"
+					},
+					"data_from_on_prem_properties_typeProperties_host": {
+						"value": "[parameters('data_from_on_prem_properties_typeProperties_host')]"
+					},
+					"data_from_on_prem_properties_typeProperties_userId": {
+						"value": "[parameters('data_from_on_prem_properties_typeProperties_userId')]"
 					}
 				}
 			},

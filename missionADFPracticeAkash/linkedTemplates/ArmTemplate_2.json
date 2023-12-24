@@ -7,16 +7,44 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "missionADFPracticeAkash"
 		},
+		"data_from_on_prem_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'data_from_on_prem'"
+		},
 		"sql_parameterized_lk_service_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'sql_parameterized_lk_service'",
 			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=missionazure2023.database.windows.net;Initial Catalog=@{linkedService().databaseName};User ID=@{linkedService().userName}"
+		},
+		"data_from_on_prem_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "C:\\data"
+		},
+		"data_from_on_prem_properties_typeProperties_userId": {
+			"type": "string",
+			"defaultValue": "vm123"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/rest_data_set')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "rest_linked_service",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {},
+				"schema": []
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/sales_order_data_model')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
@@ -289,6 +317,28 @@
 						"type": "String"
 					}
 				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/data_from_on_prem')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "FileServer",
+				"typeProperties": {
+					"host": "[parameters('data_from_on_prem_properties_typeProperties_host')]",
+					"userId": "[parameters('data_from_on_prem_properties_typeProperties_userId')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('data_from_on_prem_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "selfHostedRT",
+					"type": "IntegrationRuntimeReference"
+				}
 			},
 			"dependsOn": []
 		},
@@ -1761,212 +1811,6 @@
 				},
 				"annotations": [],
 				"lastPublishTime": "2023-10-22T13:10:13Z"
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/sql_db_generic_table')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Ingestion_Product_Addres_To_JSON')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "loopup fro address Report",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "select count(*) as recordCount from SalesLt.Address",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "sql_customer_table_data_set",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						}
-					},
-					{
-						"name": "copy Address",
-						"type": "IfCondition",
-						"dependsOn": [
-							{
-								"activity": "loopup fro address Report",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"expression": {
-								"value": "@greater(activity('loopup fro address Report').output.firstRow.recordCount,100)",
-								"type": "Expression"
-							},
-							"ifTrueActivities": [
-								{
-									"name": "copy in address Table",
-									"type": "Copy",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "0.12:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"source": {
-											"type": "AzureSqlSource",
-											"queryTimeout": "02:00:00",
-											"partitionOption": "None"
-										},
-										"sink": {
-											"type": "DelimitedTextSink",
-											"storeSettings": {
-												"type": "AzureBlobFSWriteSettings"
-											},
-											"formatSettings": {
-												"type": "DelimitedTextWriteSettings",
-												"quoteAllText": true,
-												"fileExtension": ".txt"
-											}
-										},
-										"enableStaging": false,
-										"translator": {
-											"type": "TabularTranslator",
-											"typeConversion": true,
-											"typeConversionSettings": {
-												"allowDataTruncation": true,
-												"treatBooleanAsNumber": false
-											}
-										}
-									},
-									"inputs": [
-										{
-											"referenceName": "sql_db_generic_table",
-											"type": "DatasetReference",
-											"parameters": {
-												"SchemaName": "SalesLt",
-												"TableName": "Address"
-											}
-										}
-									],
-									"outputs": [
-										{
-											"referenceName": "adls_table_generic",
-											"type": "DatasetReference",
-											"parameters": {
-												"folderPath": "AddressAssignment"
-											}
-										}
-									]
-								}
-							]
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"folder": {
-					"name": "pipelines_if_lookup/child_pipeline"
-				},
-				"annotations": [],
-				"lastPublishTime": "2023-10-23T03:13:46Z"
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/sql_customer_table_data_set')]",
-				"[concat(variables('factoryId'), '/datasets/sql_db_generic_table')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Ingestion_Product_SQLDB_ADLS_Folder')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Copy Product Data",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".txt"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "sql_db_generic_table",
-								"type": "DatasetReference",
-								"parameters": {
-									"SchemaName": "SalesLt",
-									"TableName": "Product"
-								}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "adls_table_generic",
-								"type": "DatasetReference",
-								"parameters": {
-									"folderPath": "Product"
-								}
-							}
-						]
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"folder": {
-					"name": "Assignment 5"
-				},
-				"annotations": [],
-				"lastPublishTime": "2023-10-22T13:06:36Z"
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/sql_db_generic_table')]"
