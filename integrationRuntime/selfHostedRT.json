@@ -1,0 +1,6 @@
+{
+	"name": "selfHostedRT",
+	"properties": {
+		"type": "SelfHosted"
+	}
+}
