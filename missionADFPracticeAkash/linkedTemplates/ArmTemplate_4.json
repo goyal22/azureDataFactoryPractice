@@ -1119,14 +1119,23 @@
 					"referenceName": "data_from_on_prem",
 					"type": "LinkedServiceReference"
 				},
+				"parameters": {
+					"currentYear": {
+						"type": "string"
+					}
+				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
 						"type": "FileServerLocation",
-						"folderPath": "2023/Loan"
+						"folderPath": {
+							"value": "@dataset().currentYear",
+							"type": "Expression"
+						}
 					},
 					"columnDelimiter": ",",
+					"rowDelimiter": "\n",
 					"escapeChar": "\\",
 					"firstRowAsHeader": true,
 					"quoteChar": "\""
