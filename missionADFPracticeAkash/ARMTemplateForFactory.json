@@ -3881,7 +3881,7 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "on_prem_file",
+								"referenceName": "loandDataSet",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -3896,6 +3896,20 @@
 								}
 							}
 						]
+					},
+					{
+						"name": "Get Metadata1",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {}
 					}
 				],
 				"policy": {
@@ -3904,7 +3918,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/on_prem_file')]",
+				"[concat(variables('factoryId'), '/datasets/loandDataSet')]",
 				"[concat(variables('factoryId'), '/datasets/sql_db_generic_table')]"
 			]
 		},
@@ -7357,6 +7371,66 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/sql_database_connection_linked_service')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/loandDataSet')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "data_from_on_prem",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "FileServerLocation",
+						"folderPath": "2023/Loan"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "id",
+						"type": "String"
+					},
+					{
+						"name": "first_name",
+						"type": "String"
+					},
+					{
+						"name": "last_name",
+						"type": "String"
+					},
+					{
+						"name": "email",
+						"type": "String"
+					},
+					{
+						"name": "gender",
+						"type": "String"
+					},
+					{
+						"name": "salary",
+						"type": "String"
+					},
+					{
+						"name": "creationDate",
+						"type": "String"
+					},
+					{
+						"name": "bonus",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/data_from_on_prem')]"
 			]
 		},
 		{
