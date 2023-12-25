@@ -8,9 +8,6 @@
 		"parameters": {
 			"currentYear": {
 				"type": "string"
-			},
-			"productName": {
-				"type": "string"
 			}
 		},
 		"annotations": [],
@@ -19,7 +16,7 @@
 			"location": {
 				"type": "FileServerLocation",
 				"folderPath": {
-					"value": "@concat(dataset().currentYear,'/',dataset().productName)",
+					"value": "@dataset().currentYear",
 					"type": "Expression"
 				}
 			},

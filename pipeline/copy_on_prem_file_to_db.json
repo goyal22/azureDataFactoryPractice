@@ -19,8 +19,7 @@
 						"referenceName": "loandDataSet",
 						"type": "DatasetReference",
 						"parameters": {
-							"currentYear": "2023",
-							"productName": "Loan"
+							"currentYear": "2023"
 						}
 					},
 					"fieldList": [
