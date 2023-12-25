@@ -17,7 +17,11 @@
 				"typeProperties": {
 					"dataset": {
 						"referenceName": "loandDataSet",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"currentYear": "2023",
+							"productName": "Loan"
+						}
 					},
 					"fieldList": [
 						"childItems",
