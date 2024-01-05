@@ -1,10 +1,6 @@
 {
 	"name": "on_prem_file",
 	"properties": {
-		"linkedServiceName": {
-			"referenceName": "data_from_on_prem",
-			"type": "LinkedServiceReference"
-		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {

@@ -1,10 +1,6 @@
 {
 	"name": "loandDataSet",
 	"properties": {
-		"linkedServiceName": {
-			"referenceName": "data_from_on_prem",
-			"type": "LinkedServiceReference"
-		},
 		"parameters": {
 			"currentYear": {
 				"type": "string"
