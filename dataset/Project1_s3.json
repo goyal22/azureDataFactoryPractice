@@ -15,7 +15,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AmazonS3Location",
-				"bucketName": "deakashproject1",
+				"bucketName": "bucketadf",
 				"folderPath": {
 					"value": "@dataset().filePath",
 					"type": "Expression"
