@@ -5,12 +5,21 @@
 			"referenceName": "AmazonS31",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"filePath": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "Json",
 		"typeProperties": {
 			"location": {
 				"type": "AmazonS3Location",
-				"bucketName": "deakashproject1"
+				"bucketName": "deakashproject1",
+				"folderPath": {
+					"value": "@dataset().filePath",
+					"type": "Expression"
+				}
 			}
 		},
 		"schema": {
