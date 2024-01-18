@@ -1,0 +1,24 @@
+{
+	"name": "prjct1_strg_trigger",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "staging_to_sql_p2",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/input/blobs/staging",
+			"ignoreEmptyBlobs": true,
+			"scope": "/subscriptions/e8fafbcf-cd27-4b04-aa2e-dd7f387eccfe/resourceGroups/DefaultResourceGroup-EUS/providers/Microsoft.Storage/storageAccounts/project1storagede",
+			"events": [
+				"Microsoft.Storage.BlobCreated"
+			]
+		}
+	}
+}
