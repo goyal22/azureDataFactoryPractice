@@ -1,0 +1,41 @@
+{
+	"name": "azure_to_sql",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "sql_db_ls",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "VehicleID",
+				"type": "varchar"
+			},
+			{
+				"name": "latitiude",
+				"type": "varchar"
+			},
+			{
+				"name": "longitude",
+				"type": "varchar"
+			},
+			{
+				"name": "City",
+				"type": "varchar"
+			},
+			{
+				"name": "temeprature",
+				"type": "varchar"
+			},
+			{
+				"name": "speed",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "IOtData"
+		}
+	}
+}
