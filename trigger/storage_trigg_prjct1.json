@@ -1,0 +1,17 @@
+{
+	"name": "storage_trigg_prjct1",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/input/blobs/staging",
+			"ignoreEmptyBlobs": true,
+			"scope": "/subscriptions/e8fafbcf-cd27-4b04-aa2e-dd7f387eccfe/resourceGroups/DefaultResourceGroup-EUS/providers/Microsoft.Storage/storageAccounts/project1storagede",
+			"events": [
+				"Microsoft.Storage.BlobCreated"
+			]
+		}
+	}
+}
