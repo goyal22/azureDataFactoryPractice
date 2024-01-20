@@ -64,7 +64,10 @@
 					},
 					"dataset": {
 						"referenceName": "prjct2_sl_ds_agentData",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"TableName": "dbo.Agent"
+						}
 					}
 				}
 			},
