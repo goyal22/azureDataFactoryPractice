@@ -27,7 +27,7 @@
 						}
 					},
 					"dataset": {
-						"referenceName": "DelimitedText1",
+						"referenceName": "highwaterMark",
 						"type": "DatasetReference"
 					}
 				}
@@ -87,7 +87,7 @@
 					"source": {
 						"type": "AzureSqlSource",
 						"sqlReaderQuery": {
-							"value": "select * from dbo.agent where\n create_timestamp> '@{formatDateTime(activity('get hw from high_water_mark_file').output.firstRow.prop_0,'yyyy-MM-dd HH:mm:ss')}' AND\n  create_timestamp <= '@{formatDateTime(activity('get hw from agent table').output.firstRow.MaxDate,'yyyy-MM-dd HH:mm:ss')}'",
+							"value": "select * from dbo.agent where create_timestamp> '@{formatDateTime(activity('get hw from high_water_mark_file').output.firstRow.prop_0,'yyyy-MM-dd HH:mm:ss')}' AND create_timestamp <= '@{formatDateTime(activity('get hw from agent table').output.firstRow.MaxDate,'yyyy-MM-dd HH:mm:ss')}'",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
@@ -126,7 +126,7 @@
 				]
 			},
 			{
-				"name": "Copy data2",
+				"name": "updatw_hw",
 				"type": "Copy",
 				"dependsOn": [
 					{
@@ -148,7 +148,7 @@
 					"source": {
 						"type": "AzureSqlSource",
 						"sqlReaderQuery": {
-							"value": "'@{activity('get hw from agent table').output.firstRow}'",
+							"value": "select '@{activity('get hw from agent table').output.firstRow.MaxDate}'",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
@@ -183,7 +183,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "DelimitedText1",
+						"referenceName": "highwaterMark",
 						"type": "DatasetReference"
 					}
 				]
