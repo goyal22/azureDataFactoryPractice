@@ -28,7 +28,10 @@
 					},
 					"dataset": {
 						"referenceName": "highwaterMark",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"folderPath": "AgentData"
+						}
 					}
 				}
 			},
