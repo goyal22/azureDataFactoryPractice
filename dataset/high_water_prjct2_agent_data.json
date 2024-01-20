@@ -1,0 +1,29 @@
+{
+	"name": "high_water_prjct2_agent_data",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "prjct2_adlsgen2_lks_service",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "HighWaterMark_Agent.txt",
+				"folderPath": "AgentData",
+				"fileSystem": "landing"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "1900-01-01 00:00:00",
+				"type": "String"
+			}
+		]
+	}
+}
