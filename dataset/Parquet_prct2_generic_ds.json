@@ -1,0 +1,53 @@
+{
+	"name": "Parquet_prct2_generic_ds",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "prjct2_adlsgen2_lks_service",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"folderPath": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@dataset().folderPath",
+					"type": "Expression"
+				},
+				"fileSystem": "landing"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "agent_id",
+				"type": "INT32"
+			},
+			{
+				"name": "agent_name",
+				"type": "UTF8"
+			},
+			{
+				"name": "agent_email",
+				"type": "UTF8"
+			},
+			{
+				"name": "agent_phone",
+				"type": "UTF8"
+			},
+			{
+				"name": "branch_id",
+				"type": "INT32"
+			},
+			{
+				"name": "create_timestamp",
+				"type": "INT96"
+			}
+		]
+	}
+}

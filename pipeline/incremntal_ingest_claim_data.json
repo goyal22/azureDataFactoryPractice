@@ -1,0 +1,217 @@
+{
+	"name": "incremntal_ingest_claim_data",
+	"properties": {
+		"activities": [
+			{
+				"name": "Get  Lst run date from high water mark file",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"dataset": {
+						"referenceName": "highwaterMark",
+						"type": "DatasetReference",
+						"parameters": {
+							"folderPath": "claimData",
+							"fileName": "hwm_claim.txt"
+						}
+					}
+				}
+			},
+			{
+				"name": "Get  Lst run date from db",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Get  Lst run date from high water mark file",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "select max(LastUpdatedTimeStamp) as MaxDate from dbo.Claim",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "prjct2_sl_ds_agentData",
+						"type": "DatasetReference",
+						"parameters": {
+							"TableName": "dbo.Claim"
+						}
+					}
+				}
+			},
+			{
+				"name": "Copy claim data to adls",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Get  Lst run date from db",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "select * from dbo.Claim where LastUpdatedTimeStamp > '@{formatDateTime(activity('Get  Lst run date from high water mark file').output.firstRow.Prop_0,'yyyy-MM-dd HH:mm:ss')}' and LastUpdatedTimeStamp <= '@{formatDateTime(activity('Get  Lst run date from db').output.firstRow.MaxDate,'yyyy-MM-dd HH:mm:ss')}'",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "prjct2_sl_ds_agentData",
+						"type": "DatasetReference",
+						"parameters": {
+							"TableName": "dbo.Claim"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Parquet_prct2_generic_ds",
+						"type": "DatasetReference",
+						"parameters": {
+							"folderPath": "claimData"
+						}
+					}
+				]
+			},
+			{
+				"name": "update hw",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Copy claim data to adls",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "select '@{activity('Get  Lst run date from db').output.firstRow.MaxDate}'",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "prjct2_sl_ds_agentData",
+						"type": "DatasetReference",
+						"parameters": {
+							"TableName": "dbo.claim"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "highwaterMark",
+						"type": "DatasetReference",
+						"parameters": {
+							"folderPath": "claimData",
+							"fileName": "hwm_claim.txt"
+						}
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "prjct2"
+		},
+		"annotations": []
+	}
+}
