@@ -30,7 +30,8 @@
 						"referenceName": "highwaterMark",
 						"type": "DatasetReference",
 						"parameters": {
-							"folderPath": "AgentData"
+							"folderPath": "AgentData",
+							"fileName": "hw_agent"
 						}
 					}
 				}
@@ -187,7 +188,11 @@
 				"outputs": [
 					{
 						"referenceName": "highwaterMark",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"folderPath": "AgentData",
+							"fileName": "hw_agent"
+						}
 					}
 				]
 			}
