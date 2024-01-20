@@ -1,0 +1,20 @@
+{
+	"name": "parquet_branch_data",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "prjct2_adlsgen2_lks_service",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "BranchData",
+				"fileSystem": "landing"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
